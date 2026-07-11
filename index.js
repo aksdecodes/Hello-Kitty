@@ -22,14 +22,7 @@ const mainMenu = Markup.keyboard([
   ["💕 Next", "🌸 Stop"]
 ]).resize();
 
-bot.start((ctx) => {
-  ctx.reply(
-  "🎀 Welcome to Hello Kitty Anonymous Chat!🐱\n\nTap a button below to get started.",
-  mainMenu
-);
-});
-
-bot.command("find", (ctx) => {
+async function findPartner(ctx) {
   const userId = ctx.from.id;
 
   // Already chatting
@@ -48,23 +41,31 @@ bot.command("find", (ctx) => {
     activeChats[userId] = partnerId;
     activeChats[partnerId] = userId;
 
-    bot.telegram.sendMessage(
+    await bot.telegram.sendMessage(
       userId,
       "🎉 Partner found! Say hello."
     );
 
-    bot.telegram.sendMessage(
+    await bot.telegram.sendMessage(
       partnerId,
       "🎉 Partner found! Say hello."
     );
   } else {
     waitingUsers.push(userId);
-    ctx.reply("🔍 Searching for a partner...");
+
+    await ctx.reply("🔍 Searching for a partner...");
   }
+}
+
+bot.start((ctx) => {
+  ctx.reply(
+  "🎀 Welcome to Hello Kitty Anonymous Chat!🐱\n\nTap a button below to get started.",
+  mainMenu
+);
 });
 
-
-
+bot.command("find", findPartner);
+bot.hears("🎀 Find Partner", findPartner);
 
 
 bot.command("next", async (ctx) => {
