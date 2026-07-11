@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { Telegraf } = require("telegraf");
+const { Telegraf , Markup } = require("telegraf");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -17,12 +17,16 @@ function disconnectUsers(userId) {
   return partnerId;
 }
 
-
+const mainMenu = Markup.keyboard([
+  ["🎀 Find Partner"],
+  ["💕 Next", "🌸 Stop"]
+]).resize();
 
 bot.start((ctx) => {
   ctx.reply(
-    "🎀 Welcome to Hello Kitty Anonymous Chat!🐱\n\nUse /find to find a random partner."
-  );
+  "🎀 Welcome to Hello Kitty Anonymous Chat!🐱\n\nTap a button below to get started.",
+  mainMenu
+);
 });
 
 bot.command("find", (ctx) => {
