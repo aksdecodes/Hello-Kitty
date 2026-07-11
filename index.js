@@ -57,7 +57,22 @@ async function findPartner(ctx) {
   }
 }
 
+async function stopPartner(ctx) {
+    const userId = ctx.from.id;
 
+    const partnerId = disconnectUsers(userId);
+
+    if (!partnerId) {
+        return ctx.reply("❌ You are not in a chat.");
+    }
+
+    await ctx.reply("❌ Chat ended.");
+
+    await bot.telegram.sendMessage(
+        partnerId,
+        "💔 Your partner ended the chat.\nUse /find or tap 🎀 Find Partner."
+    );
+}
 
 bot.start((ctx) => {
   ctx.reply(
@@ -106,22 +121,10 @@ async function nextPartner(ctx) {
 bot.command("next", nextPartner);
 bot.hears("💕 Next", nextPartner);
 
-bot.command("stop", async (ctx) => {
-    const userId = ctx.from.id;
+bot.command("stop", stopPartner);
+bot.hears("🌸 Stop", stopPartner);
 
-    const partnerId = disconnectUsers(userId);
 
-    if (!partnerId) {
-        return ctx.reply("❌ You are not in a chat.");
-    }
-
-    await ctx.reply("❌ Chat ended.");
-
-    await bot.telegram.sendMessage(
-        partnerId,
-        "💔 Your partner ended the chat.\nUse /find to find another partner."
-    );
-});
 
 bot.on("text", async (ctx) => {
   const userId = ctx.from.id;
