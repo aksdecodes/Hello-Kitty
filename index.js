@@ -67,12 +67,10 @@ bot.start((ctx) => {
 });
 
 bot.command("find", findPartner);
+bot.hears("🎀 Find Partner", findPartner);
 
 
-
-bot.command("next", nextPartner);
-bot.hears("💕 Next", nextPartner);
-{
+async function nextPartner(ctx) {
   const userId = ctx.from.id;
 
   const partnerId = disconnectUsers(userId);
@@ -80,7 +78,7 @@ bot.hears("💕 Next", nextPartner);
   if (partnerId) {
     await bot.telegram.sendMessage(
       partnerId,
-      "💔 Your partner left the chat.\nUse /find to find another partner."
+      "💔 Your partner left the chat.\nUse /find or tap 🎀 Find Partner."
     );
   }
 
@@ -102,11 +100,11 @@ bot.hears("💕 Next", nextPartner);
   } else {
     waitingUsers.push(userId);
 
-    await ctx.reply(
-      "🔍 Searching for a new partner..."
-    );
+    await ctx.reply("🔍 Searching for a new partner...");
   }
-});
+}
+bot.command("next", nextPartner);
+bot.hears("💕 Next", nextPartner);
 
 bot.command("stop", async (ctx) => {
     const userId = ctx.from.id;
