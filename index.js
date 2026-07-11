@@ -57,6 +57,8 @@ async function findPartner(ctx) {
   }
 }
 
+
+
 bot.start((ctx) => {
   ctx.reply(
   "🎀 Welcome to Hello Kitty Anonymous Chat!🐱\n\nTap a button below to get started.",
@@ -65,10 +67,12 @@ bot.start((ctx) => {
 });
 
 bot.command("find", findPartner);
-bot.hears("🎀 Find Partner", findPartner);
 
 
-bot.command("next", async (ctx) => {
+
+bot.command("next", nextPartner);
+bot.hears("💕 Next", nextPartner);
+{
   const userId = ctx.from.id;
 
   const partnerId = disconnectUsers(userId);
